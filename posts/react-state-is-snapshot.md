@@ -17,6 +17,8 @@ verified_env: ""
 review_date: "2026-09-14"
 series_name: "React基礎理解"
 series_order: 1
+tested_path: "examples/react-state"
+test_command: "node --test"
 related_works: []
 ---
 
