@@ -17,7 +17,6 @@ work_next_steps: "今後追加・改善する内容"
 work_role: "個人開発 / 企画・設計・実装"
 work_period: "2026年〜開発中"
 work_github_url: "https://github.com/owner/repository"
-work_demo_url: ""
 technologies:
   - "技術名"
 related_posts: []
@@ -28,3 +27,5 @@ related_posts: []
 Works詳細ページでは、本文は「何を作ったか」セクションへ表示されます。課題、解決、設計、学び、今後の改善は本文に見出しを作らず、上の専用front matterへ記載してください。
 
 本文の先頭にH1タイトルを置く必要はありません。ページタイトルはWordPress側で自動表示されます。
+
+デモURLがある場合だけ、front matterへ `work_demo_url: "https://example.com"` を追加してください。空の値は記載しません。
