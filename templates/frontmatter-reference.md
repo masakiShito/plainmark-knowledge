@@ -46,10 +46,15 @@ work_next_steps: "今後の改善予定"
 work_role: "個人開発 / 設計・実装"
 work_period: "2026年"
 work_github_url: "https://github.com/owner/repository"
-work_demo_url: ""
 technologies:
   - "技術名"
 related_posts: []
+```
+
+デモURLがあるWorksだけ、次の項目を追加します。
+
+```yaml
+work_demo_url: "https://example.com"
 ```
 
 Worksの本文は詳細ページの「何を作ったか」セクションへ表示されます。
@@ -65,7 +70,7 @@ Worksの本文は詳細ページの「何を作ったか」セクションへ表
 
 本文の先頭にH1タイトルは不要です。タイトルはWordPress側で自動表示されます。
 
-現在の簡易YAMLパーサーでは、`|`を使った複数行文字列には対応していません。Worksの各専用フィールドは1行で記載してください。
+現在の簡易YAMLパーサーでは、`|`を使った複数行文字列と、`work_demo_url: ""`のような空文字のオプション項目を正しく扱えません。Worksの専用フィールドは1行で記載し、値がないオプション項目は行ごと省略してください。
 
 ## article_typeの目安
 
