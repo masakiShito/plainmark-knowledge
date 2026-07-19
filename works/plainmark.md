@@ -4,8 +4,20 @@ slug: "plainmark"
 post_type: "portfolio"
 status: "publish"
 date: "2026-07-19"
+excerpt: "技術記事の検証状態やレビュー期限を管理し、BlogとWorksをつなぐWordPressテーマです。"
 work_type: "product"
 work_status: "in_progress"
+work_summary: "技術記事の公開後まで見据え、検証状態・レビュー期限・依存関係を管理できるWordPressテーマです。"
+work_problem: "技術記事は公開時点では正しくても、時間の経過とともにライブラリや実行環境が変わります。通常のブログでは、いつ・どの環境で確認したのかが分かりにくく、古い情報が残り続ける課題がありました。"
+work_solution: "記事の検証状態、最終確認日、レビュー期限、依存ライブラリをメタデータとして管理し、Freshness Scoreや要レビュー表示へ反映します。さらにBlogとWorksを相互に関連付け、知識と成果物を同じサイト内でたどれるようにしました。"
+work_architecture: "表示を担当するWordPressテーマと、投稿タイプ・メタデータ・Markdown同期などの永続機能を担当するplainmark-coreプラグインを分離しています。記事とWorksはGitHub上のMarkdownを正とし、WordPress側から取得するPull Syncにも対応しています。"
+work_features: "記事の検証状態とレビュー期限 / Freshness Score / npm・PyPI依存確認 / BlogとWorksの双方向リンク / Knowledge Map / Learning Paths / Skillsページ / Code Playground / Markdown Pull・Push Sync"
+work_learnings: "WordPress開発では画面だけでなく、投稿データの寿命、テーマとプラグインの責務分担、共有サーバーの制約まで含めた運用設計が重要だと学びました。"
+work_next_steps: "回帰テストの拡充、Code Playgroundのセキュリティレビュー、Knowledge Mapの実データ検証、互換コードの整理、安定版リリースに向けた配布方法の整備を進めます。"
+work_role: "個人開発 / 企画・設計・実装・検証"
+work_period: "2026年〜開発中"
+work_github_url: "https://github.com/masakiShito/plainmark"
+work_demo_url: "https://morofujisan.com/blog/"
 technologies:
   - "WordPress"
   - "PHP"
@@ -18,118 +30,8 @@ related_posts:
   - "wordpress-markdown-sync-design"
 ---
 
-# plainmark — 技術記事を公開して終わりにしないWordPressテーマ
+plainmarkは、技術記事を公開して終わりにせず、公開後の検証・見直し・更新まで管理するためのWordPressテーマです。
 
-## 概要
+記事の検証状態やレビュー期限を可視化し、古くなった情報へ気づける仕組みを用意しています。また、技術記事とWorksを相互に関連付けることで、学んだ知識がどの成果物へつながったのかを確認できるポートフォリオを目指しています。
 
-plainmarkは、技術記事の公開だけでなく、公開後の検証・見直し・更新までを管理するためのWordPressテーマです。
-
-一般的なブログテーマが「読みやすく公開すること」を中心にしているのに対し、plainmarkでは記事を継続的に保守するナレッジ資産として扱います。記事の検証状態、最終確認日、レビュー期限、依存ライブラリなどを管理し、情報が古くなっていないかを確認できる仕組みを組み込みました。
-
-テーマ本体に加え、永続的なデータ構造や同期処理を担当する`plainmark-core`プラグイン、Markdown記事を管理するGitHubリポジトリを分離した構成にしています。
-
-- GitHub: https://github.com/masakiShito/plainmark
-- ステータス: ベータ版として開発中
-
-## 課題
-
-技術記事は、公開した時点では正しくても、時間の経過とともにライブラリや実行環境が変わり、そのままでは動かなくなることがあります。
-
-一方、通常のブログでは「最後にいつ確認したのか」「どの環境で動作したのか」「次にいつ見直すべきか」が読者にも執筆者にも分かりにくく、古い情報が残り続けがちです。
-
-また、技術記事とポートフォリオが別々に管理されていると、何を学び、その知識を何の成果物に活用したのかが伝わりにくいという課題もありました。
-
-plainmarkでは、記事の鮮度管理とBlog・Works間の関連付けをWordPress上で一体化し、知識と成果物が循環するサイトを目指しています。
-
-## 担当範囲
-
-個人開発として、以下を一貫して担当しています。
-
-- プロダクトコンセプトの策定
-- WordPressテーマ・プラグインの責務設計
-- カスタム投稿タイプとタクソノミーの設計
-- 記事ライフサイクル機能の設計・実装
-- MarkdownとWordPressの同期機能
-- BlogとWorksの相互リンク機能
-- Knowledge Map、Learning Paths、Skillsページの実装
-- Dockerによるローカル開発環境の構築
-- GitHub Actionsによるコード検証フローの整備
-- SEO、OGP、RSS拡張の実装
-
-## 技術構成
-
-### WordPress / PHP
-
-記事、Works、技術タグ、検証情報などをWordPressのデータモデルとして管理しています。
-
-表示を担当するテーマと、投稿タイプ・メタデータ・同期処理などの永続機能を担当する`plainmark-core`プラグインを分離し、テーマを変更してもデータ構造が失われにくい構成を目指しました。
-
-### Markdown / GitHub
-
-記事とWorksはYAML Front Matter付きMarkdownとしてGitHubで管理します。
-
-WordPress管理画面からGitHub上のコンテンツを取得するPull Syncを実装し、共有サーバーのように外部からのWebhookを受けにくい環境でも運用できるようにしています。
-
-### Docker
-
-WordPress、MySQL、phpMyAdminをDocker Composeで起動できるようにし、テーマとプラグインをローカルで検証できる環境を整備しました。
-
-### GitHub Actions
-
-記事に掲載したサンプルコードを定期実行し、検証結果を記事メタデータへ反映する仕組みを構築しています。記事本文だけではなく、記事が参照するコードも含めて保守する方針です。
-
-## 主な機能
-
-- 記事の検証済み・未検証・要レビュー・非推奨状態の表示
-- 検証日やレビュー期限を使ったFreshness Score
-- npm・PyPIの依存バージョン確認
-- 読者から古い情報を報告できるフィードバック機能
-- BlogとWorksの双方向リンク
-- 記事・Works・技術タグの関係を可視化するKnowledge Map
-- 技術タグや難易度から学習順を組み立てるLearning Paths
-- 記事とWorksを集計したSkillsページ
-- JavaScript / HTML / CSSを記事内で実行するCode Playground
-- 複数ファイルのコードを切り替えるCode Tabs
-- 記事変更履歴とリビジョン差分
-- 記事タイプに応じた構造化データ
-- MarkdownのPull / Push Sync
-
-## 工夫した点
-
-### 記事の「正しさ」をメタデータとして扱う
-
-単なる更新日ではなく、検証環境、検証日、レビュー期限、依存関係、読者フィードバックを組み合わせて記事の状態を判断します。
-
-これにより、新しく編集された記事と、実際に手順を再確認した記事を区別できるようにしました。
-
-### BlogとWorksを別物にしない
-
-技術記事から関連する成果物へ、成果物から実装背景を説明した記事へ移動できるようにしています。
-
-「何を知っているか」だけでなく、「その知識を何に使ったか」まで確認できるポートフォリオを意識しました。
-
-### テーマと業務ロジックを分離する
-
-カスタム投稿タイプや同期情報など、見た目が変わっても残すべき機能はプラグイン側へ寄せています。表示責務とデータ責務を整理することで、今後の変更に耐えやすい構成を目指しています。
-
-### 現実的なホスティング環境を考慮する
-
-Webhookを前提とせず、WordPress側からGitHubを取得するPull Syncを用意しました。理想的な構成だけではなく、個人サイトで利用する共有サーバーの制約も考慮しています。
-
-## 学び
-
-WordPressテーマ開発では、画面を作るだけでなく、投稿データの寿命、プラグインとの責務分担、既存環境との互換性まで考える必要があると学びました。
-
-また、技術記事を長期的に管理するには、執筆フローだけでなく、検証・レビュー・非推奨化まで含めた運用設計が重要でした。
-
-機能を増やすほど、テーマとプラグインの境界や、同期処理と検証処理の責務が曖昧になりやすいため、継続的に構成を見直しています。
-
-## 今後の改善
-
-- WordPress・PHP・ホスティング環境をまたいだ回帰テストの拡充
-- Code Playgroundのセキュリティレビュー
-- Knowledge MapとLearning Pathsの実データ検証
-- Reader Feedbackの不正利用対策
-- テーマと`plainmark-core`間に残る互換コードの整理
-- 導入手順と運用ドキュメントの拡充
-- 安定版リリースに向けたバージョニングと配布方法の整備
+現在はベータ版として開発中で、WordPressテーマ、plainmark-coreプラグイン、GitHub管理のMarkdownコンテンツを分離して運用しています。
