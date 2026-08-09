@@ -21,8 +21,8 @@ tested_path: "examples/react-state"
 test_command: "node --test"
 related_works: []
 ci_status: "passing"
-ci_checked_at: "2026-08-02T18:55:23Z"
-ci_run_url: "https://github.com/masakiShito/plainmark-knowledge/actions/runs/30762209098"
+ci_checked_at: "2026-08-09T18:25:22Z"
+ci_run_url: "https://github.com/masakiShito/plainmark-knowledge/actions/runs/31328980360"
 ---
 
 # Reactのstateは変数ではなくスナップショットとして考える
